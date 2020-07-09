@@ -1,2 +1,2 @@
 someversion:
-1.0
+$some_version

@@ -12,6 +12,9 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+Properties properties = new Properties()
+properties.put("some_version", some_version)
 task updateTemplate(type: Copy) {
     group = "template"
     description = "Switches out variables like \$total_version in .template.md files, and copies the results into .md files."
@@ -25,3 +28,5 @@ task updateTemplate(type: Copy) {
     }
     destinationDir = rootDir
 }
+
+tasks.build.dependsOn(updateTemplate.github)
