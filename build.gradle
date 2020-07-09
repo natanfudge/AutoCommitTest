@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'org.test'
+version some_version
 
 repositories {
     mavenCentral()
@@ -11,6 +13,36 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = archivesBaseName
+
+            from project.components.java
+        }
+
+
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintray_user') ? project.property('bintray_user') : ""
+    key = project.hasProperty('bintray_api_key') ? project.property('bintray_api_key') : ""
+    publications = ["mavenJava"]
+    publish = true //[Default: false] Whether version should be auto published after an upload
+    pkg {
+        repo = "libs"
+        name = "test"
+        licenses = ["mit"]
+        version {
+            name = some_version
+            released = new Date()
+        }
+    }
+
 }
 
 Properties properties = new Properties()
@@ -29,4 +61,4 @@ task updateTemplate(type: Copy) {
     destinationDir = rootDir
 }
 
-tasks.build.dependsOn(tasks.updateTemplate)
+tasks.bintrayUpload.dependsOn(tasks.updateTemplate)
