@@ -29,4 +29,4 @@ task updateTemplate(type: Copy) {
     destinationDir = rootDir
 }
 
-tasks.build.dependsOn(updateTemplate.github)
+tasks.build.dependsOn(tasks.updateTemplate)
