@@ -26,7 +26,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Publish to bintray
-        run: ./gradlew bintrayUpload -Pbintray_user={{secrets.bintray_user}} -Pbintray_api_key={{secrets.bintray_api_key}} --info --stacktrace
+        env:
+          bintray_user: ${{ secrets.bintray_user }}
+          bintray_api_key: ${{ secrets.bintray_api_key }}
+
+        run: ./gradlew bintrayUpload -Pbintray_user=$bintray_user -Pbintray_api_key=$bintray_api_key --info --stacktrace
 
       - name: Commit files
         run: |
