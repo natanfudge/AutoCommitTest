@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+task updateTemplate(type: Copy) {
+    group = "template"
+    description = "Switches out variables like \$total_version in .template.md files, and copies the results into .md files."
+    from(rootDir)
+    include("**/*.template.md")
+    filesMatching("**/*.template.md") {
+        def extensionLength = ".template.md".length()
+
+        name = sourceName.substring(0, sourceName.length() - extensionLength) + ".md"
+        expand(properties)
+    }
+    destinationDir = rootDir
+}
